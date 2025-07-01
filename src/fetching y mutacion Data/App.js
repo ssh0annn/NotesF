@@ -35,26 +35,37 @@ const App = (props)=> {
   }, 2000)
 }, [newNote]);
 
+/*
+      useEffect(() => {
+  setLoading(true);
+
+  setTimeout(() => {
+    fetch('https://jsonplaceholder.typicode.com/posts')
+      .then(response => response.json())
+      .then(json => {
+        setNotes(json);
+        setLoading(false);
+      });
+  }, 2000);
+}, [newNote]); // ✅ Este [] va aquí
+  //importante se renderiza primero el componente aunque el fetch no haiga llegado
+
+*/
+
     const handleNewNote = (event)=>{
-      console.log(event.target.value)
        setNewNote(event.target.value)
     }
 
     const handleSummbit = (event)=>{
-      console.log('estan son las notas,actuales',notes)
         event.preventDefault()
-
           const noteToAddState = {
-            title:newNote,
-            body:newNote,
-            userId:notes.length + 1
+            id:notes.length + 1,
+            content:newNote,
+            body:newNote
           }
-          axios.post('https://jsonplaceholder.typicode.com/posts',{
-              noteToAddState
-          }).then(respose=>{
-            const {data} = respose
-            setNotes(prevMotes => prevMotes.concat(data))
-          })
+         
+          setNotes(notes)
+          console.log('nuevo array para rederizar',...props.notes,noteToAddState)
           setNewNote("")
     }
 
@@ -80,6 +91,9 @@ const App = (props)=> {
               {notes
               .map(note => <Notas key={note.id}  {...note}/>)}
             </ol>
+
+            
+
         </div>
     )
 }
